@@ -55,7 +55,7 @@ class Configuration implements ArrayAccess, Iterator, Countable
      * @param array<int|string,mixed>|bool $bootstrap Bootstrap config values, aka config values used before
      *                                                the class has been instantiated.
      */
-    public function __construct($bootstrap = FALSE)
+    public function __construct(array|bool $bootstrap = FALSE)
     {
         if (!is_array($bootstrap))
         {
@@ -146,7 +146,7 @@ class Configuration implements ArrayAccess, Iterator, Countable
     /**
      * Convert an input array recursively into a Configuration class hierarchy.
      *
-     * @param array<int|string,mixed> $array Input array
+     * @param mixed $array Input array or scalar
      *
      * @return array<int|string,mixed> An array with sub-arrays converted
      */
@@ -242,7 +242,7 @@ class Configuration implements ArrayAccess, Iterator, Countable
      */
     public function offsetGet(mixed $offset): mixed
     {
-        return isset($this->config[$offset]) ? $this->config[$offset] : NULL;
+        return $this->config[$offset] ?? NULL;
     }
 
     /**
