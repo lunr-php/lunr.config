@@ -42,9 +42,6 @@ class ConfigurationLoadFileTest extends ConfigurationTest
         $this->config['load']['one'] = 'Value';
         $this->config['load']['two'] = 'String';
 
-        $property = $this->reflection->getProperty('config');
-        $property->setAccessible(TRUE);
-
         $this->assertEquals($this->config, $this->class->toArray());
     }
 
@@ -55,9 +52,6 @@ class ConfigurationLoadFileTest extends ConfigurationTest
      */
     public function testLoadFileOverwritesValues(): void
     {
-        $property = $this->reflection->getProperty('config');
-        $property->setAccessible(TRUE);
-
         $this->class->load_file('overwrite');
 
         $config                   = [];
@@ -76,9 +70,6 @@ class ConfigurationLoadFileTest extends ConfigurationTest
      */
     public function testLoadFileMergesArrays(): void
     {
-        $property = $this->reflection->getProperty('config');
-        $property->setAccessible(TRUE);
-
         $this->class->load_file('merge');
 
         $config                   = [];
@@ -96,8 +87,7 @@ class ConfigurationLoadFileTest extends ConfigurationTest
      */
     public function testLoadInvalidFile(): void
     {
-        $property = $this->reflection->getProperty('config');
-        $property->setAccessible(TRUE);
+        $property = $this->get_reflection_property('config');
 
         $before = $property->getValue($this->class);
 
@@ -124,8 +114,7 @@ class ConfigurationLoadFileTest extends ConfigurationTest
             $this->expectException('\PHPUnit_Framework_Error');
         }
 
-        $property = $this->reflection->getProperty('config');
-        $property->setAccessible(TRUE);
+        $property = $this->get_reflection_property('config');
 
         $before = $property->getValue($this->class);
 
@@ -141,8 +130,7 @@ class ConfigurationLoadFileTest extends ConfigurationTest
      */
     public function testLoadFileInvalidatesSize(): void
     {
-        $property = $this->reflection->getProperty('size_invalid');
-        $property->setAccessible(TRUE);
+        $property = $this->get_reflection_property('size_invalid');
 
         $this->assertFalse($property->getValue($this->class));
 
