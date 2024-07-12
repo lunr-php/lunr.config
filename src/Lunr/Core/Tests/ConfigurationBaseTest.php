@@ -34,7 +34,7 @@ class ConfigurationBaseTest extends ConfigurationTest
      */
     public function testConfigIsEmpty(): void
     {
-        $this->assertEmpty($this->get_reflection_property_value('config'));
+        $this->assertPropertyEmpty('config');
     }
 
     /**
@@ -80,7 +80,7 @@ class ConfigurationBaseTest extends ConfigurationTest
      */
     public function testToArrayIsEmpty(): void
     {
-        $this->assertEquals([], $this->class->toArray());
+        $this->assertArrayEmpty($this->class->toArray());
     }
 
     /**
