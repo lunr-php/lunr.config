@@ -236,7 +236,14 @@ class Configuration implements ArrayAccess, Iterator, Countable
      */
     public function offsetExists($offset): bool
     {
-        return isset($this->config[$offset]);
+        if (isset($this->config[$offset]))
+        {
+            return TRUE;
+        }
+
+        $matching_partial = $this->getPartialMatches($offset);
+
+        return count($matching_partial) > 0;
     }
 
     /**
@@ -268,7 +275,24 @@ class Configuration implements ArrayAccess, Iterator, Countable
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
-        return isset($this->config[$offset]) ? $this->config[$offset] : NULL;
+        $matching_partial = $this->getPartialMatches($offset);
+        if (isset($this->config[$offset]))
+        {
+            return $this->config[$offset];
+        }
+
+        if (count($matching_partial) === 0)
+        {
+            return NULL;
+        }
+
+        foreach ($matching_partial as $key => $value)
+        {
+            unset($matching_partial[$key]);
+            $matching_partial[str_replace($offset . '_', '', $key)] = $value;
+        }
+
+        return $this->convert_array_to_class($matching_partial);
     }
 
     /**
@@ -288,6 +312,18 @@ class Configuration implements ArrayAccess, Iterator, Countable
         }
 
         return $data;
+    }
+
+    /**
+     * Get partial config matches, used to match environment variables
+     *
+     * @param mixed $offset The offset to check against
+     *
+     * @return array<string,mixed> matching config entries
+     */
+    private function getPartialMatches(mixed $offset): array
+    {
+        return array_filter($this->config, fn ($key) => str_starts_with($key  . '_', $offset), ARRAY_FILTER_USE_KEY);
     }
 
     /**
