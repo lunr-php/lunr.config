@@ -29,25 +29,25 @@ class Configuration implements ArrayAccess, Iterator, Countable
      * Configuration values
      * @var array<int|string,mixed>
      */
-    private $config;
+    private array $config;
 
     /**
      * Position of the array pointer
      * @var int
      */
-    private $position;
+    private int $position;
 
     /**
      * Size of the $config array
      * @var int
      */
-    private $size;
+    private int $size;
 
     /**
      * Whether the cached size is invalid (outdated)
      * @var boolean
      */
-    private $size_invalid;
+    private bool $size_invalid;
 
     /**
      * Constructor.
@@ -55,7 +55,7 @@ class Configuration implements ArrayAccess, Iterator, Countable
      * @param array<int|string,mixed>|bool $bootstrap Bootstrap config values, aka config values used before
      *                                                the class has been instantiated.
      */
-    public function __construct($bootstrap = FALSE)
+    public function __construct(array|bool $bootstrap = FALSE)
     {
         if (!is_array($bootstrap))
         {
@@ -89,7 +89,7 @@ class Configuration implements ArrayAccess, Iterator, Countable
      *
      * @return void
      */
-    public function __clone()
+    public function __clone(): void
     {
         foreach ($this->config as $key => $value)
         {
@@ -109,7 +109,7 @@ class Configuration implements ArrayAccess, Iterator, Countable
      *
      * @return string $return
      */
-    public function __toString()
+    public function __toString(): string
     {
         return 'Array';
     }
@@ -148,10 +148,10 @@ class Configuration implements ArrayAccess, Iterator, Countable
      *
      * @param array<int|string,mixed> $array Input array
      *
-     * @return mixed $array A scalar value or an array
+     * @return scalar|array|Configuration $array A scalar value or an array
      */
     #[\ReturnTypeWillChange]
-    private function convert_array_to_class($array)
+    private function convert_array_to_class(mixed $array): mixed
     {
         if (!is_array($array))
         {
@@ -185,7 +185,7 @@ class Configuration implements ArrayAccess, Iterator, Countable
      *
      * @return void
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         $value = $this->convert_array_to_class($value);
         if (is_null($offset))
@@ -211,7 +211,7 @@ class Configuration implements ArrayAccess, Iterator, Countable
      *
      * @return bool $return TRUE on success, FALSE on failure
      */
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->config[$offset]);
     }
@@ -225,7 +225,7 @@ class Configuration implements ArrayAccess, Iterator, Countable
      *
      * @return void
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->config[$offset]);
         $this->size_invalid = TRUE;
@@ -242,10 +242,9 @@ class Configuration implements ArrayAccess, Iterator, Countable
      * @return mixed $return The value of the requested offset or null if
      *                       it doesn't exist.
      */
-    #[\ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
-        return isset($this->config[$offset]) ? $this->config[$offset] : NULL;
+        return $this->config[$offset] ?? NULL;
     }
 
     /**
@@ -287,8 +286,7 @@ class Configuration implements ArrayAccess, Iterator, Countable
      *
      * @return mixed $return The current value of the config array
      */
-    #[\ReturnTypeWillChange]
-    public function current()
+    public function current(): mixed
     {
         return current($this->config);
     }
@@ -298,10 +296,9 @@ class Configuration implements ArrayAccess, Iterator, Countable
      *
      * (Inherited from Iterator)
      *
-     * @return scalar $return Scalar on success, NULL on failure
+     * @return string|int|null $return Scalar on success, NULL on failure
      */
-    #[\ReturnTypeWillChange]
-    public function key()
+    public function key(): string|int|null
     {
         return key($this->config);
     }
