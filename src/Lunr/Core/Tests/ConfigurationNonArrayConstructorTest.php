@@ -33,7 +33,7 @@ class ConfigurationNonArrayConstructorTest extends ConfigurationTest
      */
     public function testConfigIsEmpty(): void
     {
-        $this->assertEmpty($this->get_reflection_property_value('config'));
+        $this->assertPropertyEmpty('config');
     }
 
     /**
