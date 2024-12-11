@@ -40,9 +40,6 @@ class ConfigurationLoadFileTest extends ConfigurationTest
         $this->config['load']['one'] = 'Value';
         $this->config['load']['two'] = 'String';
 
-        $property = $this->reflection->getProperty('config');
-        $property->setAccessible(TRUE);
-
         $this->assertEquals($this->config, $this->class->toArray());
     }
 
@@ -53,9 +50,6 @@ class ConfigurationLoadFileTest extends ConfigurationTest
      */
     public function testLoadFileOverwritesValues(): void
     {
-        $property = $this->reflection->getProperty('config');
-        $property->setAccessible(TRUE);
-
         $this->class->load_file('overwrite');
 
         $config                   = [];
@@ -74,9 +68,6 @@ class ConfigurationLoadFileTest extends ConfigurationTest
      */
     public function testLoadFileMergesArrays(): void
     {
-        $property = $this->reflection->getProperty('config');
-        $property->setAccessible(TRUE);
-
         $this->class->load_file('merge');
 
         $config                   = [];
@@ -94,14 +85,11 @@ class ConfigurationLoadFileTest extends ConfigurationTest
      */
     public function testLoadInvalidFile(): void
     {
-        $property = $this->reflection->getProperty('config');
-        $property->setAccessible(TRUE);
-
-        $before = $property->getValue($this->class);
+        $before = $this->get_reflection_property_value('config');
 
         $this->class->load_file('not_array');
 
-        $after = $property->getValue($this->class);
+        $after = $this->get_reflection_property_value('config');
 
         $this->assertEquals($before, $after);
     }
@@ -111,25 +99,13 @@ class ConfigurationLoadFileTest extends ConfigurationTest
      */
     public function testLoadNonExistingFile(): void
     {
-        if (class_exists('\PHPUnit\Framework\Error\Error'))
-        {
-            // PHPUnit 6
-            $this->expectException('\PHPUnit\Framework\Error\Error');
-        }
-        else
-        {
-            // PHPUnit 5
-            $this->expectException('\PHPUnit_Framework_Error');
-        }
+        $this->expectException('\PHPUnit\Framework\Error\Error');
 
-        $property = $this->reflection->getProperty('config');
-        $property->setAccessible(TRUE);
-
-        $before = $property->getValue($this->class);
+        $before = $this->get_reflection_property_value('config');
 
         $this->class->load_file('not_exists');
 
-        $after = $property->getValue($this->class);
+        $after = $this->get_reflection_property_value('config');
 
         $this->assertEquals($before, $after);
     }
@@ -139,14 +115,11 @@ class ConfigurationLoadFileTest extends ConfigurationTest
      */
     public function testLoadFileInvalidatesSize(): void
     {
-        $property = $this->reflection->getProperty('size_invalid');
-        $property->setAccessible(TRUE);
-
-        $this->assertFalse($property->getValue($this->class));
+        $this->assertPropertyEquals('size_invalid', FALSE);
 
         $this->class->load_file('correct');
 
-        $this->assertTrue($property->getValue($this->class));
+        $this->assertPropertyEquals('size_invalid', TRUE);
     }
 
 }
