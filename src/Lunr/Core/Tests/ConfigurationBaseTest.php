@@ -60,6 +60,14 @@ class ConfigurationBaseTest extends ConfigurationTest
     }
 
     /**
+     * Test that the class was initialized as a root config container.
+     */
+    public function testObjectIsRootConfig(): void
+    {
+        $this->assertPropertySame('isRootConfig', TRUE);
+    }
+
+    /**
      * Test the function __toString().
      *
      * @covers Lunr\Core\Configuration::__toString

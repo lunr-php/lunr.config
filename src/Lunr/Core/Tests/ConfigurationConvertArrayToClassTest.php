@@ -78,6 +78,9 @@ class ConfigurationConvertArrayToClassTest extends ConfigurationTest
 
         $this->assertInstanceOf('Lunr\Core\Configuration', $output['test2']);
 
+        $property = $this->get_reflection_property('isRootConfig');
+        $this->assertFalse($property->getValue($output['test2']));
+
         $property = $this->get_reflection_property('size');
         $this->assertEquals(2, $property->getValue($output['test2']));
 

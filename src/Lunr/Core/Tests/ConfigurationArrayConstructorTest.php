@@ -53,6 +53,14 @@ class ConfigurationArrayConstructorTest extends ConfigurationTest
     }
 
     /**
+     * Test that the class was initialized as a root config container.
+     */
+    public function testObjectIsRootConfig(): void
+    {
+        $this->assertPropertySame('isRootConfig', TRUE);
+    }
+
+    /**
      * Test that $config is set up according to the input.
      */
     public function testConfig(): void
@@ -61,6 +69,9 @@ class ConfigurationArrayConstructorTest extends ConfigurationTest
 
         $this->assertEquals($this->config['test1'], $output['test1']);
         $this->assertInstanceOf('Lunr\Core\Configuration', $output['test2']);
+
+        $property = $this->get_reflection_property('isRootConfig');
+        $this->assertFalse($property->getValue($output['test2']));
     }
 
     /**

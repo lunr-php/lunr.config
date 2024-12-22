@@ -50,12 +50,22 @@ class Configuration implements ArrayAccess, Iterator, Countable
     private bool $size_invalid;
 
     /**
+     * Whether the object holds top-level config values or not
+     *
+     * @var bool
+     *
+     * @phpstan-ignore property.onlyWritten
+     */
+    private readonly bool $isRootConfig;
+
+    /**
      * Constructor.
      *
-     * @param array<int|string,mixed>|bool $bootstrap Bootstrap config values, aka config values used before
-     *                                                the class has been instantiated.
+     * @param array<int|string,mixed>|bool $bootstrap    Bootstrap config values, aka config values used before
+     *                                                   the class has been instantiated.
+     * @param bool                         $isRootConfig Whether the object holds top-level config values or not
      */
-    public function __construct(array|bool $bootstrap = FALSE)
+    public function __construct(array|bool $bootstrap = FALSE, bool $isRootConfig = TRUE)
     {
         if (!is_array($bootstrap))
         {
@@ -70,6 +80,7 @@ class Configuration implements ArrayAccess, Iterator, Countable
         $this->config = $bootstrap;
         $this->rewind();
         $this->size_invalid = TRUE;
+        $this->isRootConfig = $isRootConfig;
         $this->count();
     }
 
@@ -167,7 +178,7 @@ class Configuration implements ArrayAccess, Iterator, Countable
         {
             if (is_array($value))
             {
-                $array[$key] = new self($value);
+                $array[$key] = new self($value, isRootConfig: FALSE);
             }
         }
 
