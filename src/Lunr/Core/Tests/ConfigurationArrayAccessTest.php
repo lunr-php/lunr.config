@@ -88,7 +88,7 @@ class ConfigurationArrayAccessTest extends ConfigurationTestCase
      */
     public function testOffsetExistsDoesNotAutoloadForAlreadyLoadedKey(): void
     {
-        $loaded = $this->get_reflection_property('loaded');
+        $loaded = $this->getReflectionProperty('loaded');
 
         $this->assertNotContains('test1', $loaded->getValue($this->class));
 
@@ -102,7 +102,7 @@ class ConfigurationArrayAccessTest extends ConfigurationTestCase
      */
     public function testOffsetExistsDoesNotAutoloadForAlreadyTriedKey(): void
     {
-        $loaded = $this->get_reflection_property('loaded');
+        $loaded = $this->getReflectionProperty('loaded');
 
         $this->assertNotContains('foo', $loaded->getValue($this->class));
 
@@ -120,7 +120,7 @@ class ConfigurationArrayAccessTest extends ConfigurationTestCase
      */
     public function testOffsetExistsAutoloads(): void
     {
-        $loaded = $this->get_reflection_property('loaded');
+        $loaded = $this->getReflectionProperty('loaded');
 
         $this->assertNotContains('autoload', $loaded->getValue($this->class));
 
@@ -140,7 +140,7 @@ class ConfigurationArrayAccessTest extends ConfigurationTestCase
 
         $this->setReflectionPropertyValue('environmentOverride', $override);
 
-        $loaded = $this->get_reflection_property('loaded');
+        $loaded = $this->getReflectionProperty('loaded');
 
         $this->assertNotContains('missing', $loaded->getValue($this->class));
 
@@ -207,7 +207,7 @@ class ConfigurationArrayAccessTest extends ConfigurationTestCase
      */
     public function testOffsetGetDoesNotAutoloadForAlreadyLoadedKey(): void
     {
-        $loaded = $this->get_reflection_property('loaded');
+        $loaded = $this->getReflectionProperty('loaded');
 
         $this->assertNotContains('test1', $loaded->getValue($this->class));
 
@@ -221,7 +221,7 @@ class ConfigurationArrayAccessTest extends ConfigurationTestCase
      */
     public function testOffsetGetDoesNotAutoloadForAlreadyTriedKey(): void
     {
-        $loaded = $this->get_reflection_property('loaded');
+        $loaded = $this->getReflectionProperty('loaded');
 
         $this->assertNotContains('foo', $loaded->getValue($this->class));
 
@@ -239,7 +239,7 @@ class ConfigurationArrayAccessTest extends ConfigurationTestCase
      */
     public function testOffsetGetAutoloads(): void
     {
-        $loaded = $this->get_reflection_property('loaded');
+        $loaded = $this->getReflectionProperty('loaded');
 
         $this->assertNotContains('autoload', $loaded->getValue($this->class));
 
@@ -259,7 +259,7 @@ class ConfigurationArrayAccessTest extends ConfigurationTestCase
 
         $this->setReflectionPropertyValue('environmentOverride', $override);
 
-        $loaded = $this->get_reflection_property('loaded');
+        $loaded = $this->getReflectionProperty('loaded');
 
         $this->assertNotContains('missing', $loaded->getValue($this->class));
 
